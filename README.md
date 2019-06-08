@@ -4,6 +4,7 @@ Ansible Journey
 # Commands
 
 ansible-vault create aws_keys.yml
+
 aws_access_key:
 aws_secret_key:
 
