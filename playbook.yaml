@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: true
+  vars:
+    instance_type: t2.micro
+    key_name: key
+    image: ami-08d65
+    region: eu-west-1
+    security_group: ansible_servers_sg
+    count: 1
+    vpc_id: vpc-0aba386
+    vpc_subnet_id: subnet-02362d
+    wait: yes
+    assign_public_ip: yes
+  vars_files:
+    - aws_keys.yml
+  roles: 
+    - provision
+

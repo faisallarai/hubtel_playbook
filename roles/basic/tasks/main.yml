@@ -1,0 +1,33 @@
+- name: Fetching instances 
+  ec2_instance_facts:
+   region: eu-west-1
+   filters:
+    "tag:Env": test
+  register: ec2_info
+  tags:
+   - always
+- name: "Download dotnet core packages-microsoft-prod.deb"
+  get_url:
+   url: https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+   dest: /tmp/packages-microsoft-prod.deb
+- name: "Run dotnet core packages-microsoft-prod.deb"
+  shell: "{{ item }}"
+  become: true
+  args:
+   warn: false
+  with_items: 
+   - dpkg -i packages-microsoft-prod.deb
+   - add-apt-repository universe
+   - apt-get install apt-transport-https
+   - apt-get update
+- name: "Install the package"
+  become: true
+  apt: 
+   name: "{{ item }}"
+   state: present
+  with_items:
+   - dotnet-sdk-2.2
+- name: "Remove the packages-microsoft-prod.deb"
+  file: 
+   path: /tmp/packages-microsoft-prod.deb
+   state: absent
